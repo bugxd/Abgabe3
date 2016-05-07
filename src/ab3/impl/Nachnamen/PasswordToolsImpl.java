@@ -75,10 +75,10 @@ public class PasswordToolsImpl implements PasswordTools {
 	public boolean checkSaltedHash(String password, SaltedHash hash) {
 		byte[] checkHash = generateHash(password, hash.getSalt());
 
-		return chaeckArray(hash.getHash(), checkHash);
+		return checkArray(hash.getHash(), checkHash);
 	}
 
-	public static boolean chaeckArray(byte[] arr1,byte[] arr2){
+	public static boolean checkArray(byte[] arr1,byte[] arr2){
 		if(arr1.length != arr2.length)
 			return false;
 
