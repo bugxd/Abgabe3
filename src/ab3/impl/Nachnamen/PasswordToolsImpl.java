@@ -11,14 +11,10 @@ public class PasswordToolsImpl implements PasswordTools {
 	
 	@Override
 	public SaltedHash createSaltedHash(String password) {
-		// TODO Auto-generated method stub
-
-
 		SaltedHash sh = new SaltedHash();
 
-
 		sh.setSalt(getNextSalt());
-		sh.setHash(generateHash(password,sh.getSalt()));
+		sh.setHash(generateHash(password.getBytes(),sh.getSalt()));
 
 		//print Hash as Hex String
 		printHexHash(sh.getHash());
@@ -26,18 +22,18 @@ public class PasswordToolsImpl implements PasswordTools {
 		return sh;
 	}
 
-	public static byte[] generateHash(String pw, byte[] salt){
+	public static byte[] generateHash(byte[] pw, byte[] salt){
 		MessageDigest md = null;
 		try {
 			md = MessageDigest.getInstance("SHA-256");
-			final byte[] all = concatArray(pw.getBytes(), salt);
+			final byte[] all = concatArray(pw, salt);
 			md.update(all);
 
 		}
 		catch (Exception ex){
 			System.out.println(ex.toString());
 		}
-		return md.digest(pw.getBytes());
+		return md.digest(pw);
 	}
 
 	public static byte[] concatArray(byte[] arr1,byte[] arr2){
@@ -73,7 +69,7 @@ public class PasswordToolsImpl implements PasswordTools {
 
 	@Override
 	public boolean checkSaltedHash(String password, SaltedHash hash) {
-		byte[] checkHash = generateHash(password, hash.getSalt());
+		byte[] checkHash = generateHash(password.getBytes(), hash.getSalt());
 
 		return checkArray(hash.getHash(), checkHash);
 	}
@@ -92,7 +88,7 @@ public class PasswordToolsImpl implements PasswordTools {
 
 	@Override
 	public byte[] PBKDF2(byte[] password, byte[] salt, int iterations, int dkLen) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
