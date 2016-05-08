@@ -6,6 +6,8 @@ import ab3.PasswordTools;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class PasswordToolsImpl implements PasswordTools {
@@ -152,12 +154,16 @@ public class PasswordToolsImpl implements PasswordTools {
     * */
     public byte[] getT(byte[] P, byte[] S, int c, int i){
 
-        if(c == 1){
-            return  calculateU_1(P,S,c,getByteOfInt(i));
+
+        byte[] u_old = calculateU_1(P,S,c,getByteOfInt(i));
+        byte[] t = u_old;
+        for(int j = 2; j < c; j++){
+            byte[] u_new = generateHash(P,u_old);
+            t = xorArray(t,u_new);
+            u_old = u_new;
         }
-        else{
-            return generateHash(P,getT(P,S,--c,i));
-        }
+
+        return t;
     }
 
     public byte[] calculateU_1(byte[] P, byte[] S, int c, byte[] i){
